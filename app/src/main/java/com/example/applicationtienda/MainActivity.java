@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Ejecutamos las pruebas de los patrones
         probarPatrones();
+        probarCommandYState();
     }
 
     private void probarPatrones() {
@@ -74,6 +75,73 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "\n========== TODAS LAS PRUEBAS COMPLETADAS ==========");
 
             Toast.makeText(this, "¡Patrones ejecutados! Revisa Logcat", Toast.LENGTH_LONG).show();
+
+        } catch (Exception e) {
+            Log.e(TAG, "Error: " + e.getMessage(), e);
+            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+    private void probarCommandYState() {
+        try {
+            Log.d(TAG, "\n========== PRUEBA 4: COMMAND (Undo/Redo) ==========");
+
+            ShopFacade shop = new ShopFacade();
+            Product laptop = shop.createElectronicProduct("Laptop Gamer", 1200.00);
+            Product camisa = shop.createClothingProduct("Camisa Polo", 25.00);
+
+            com.example.applicationtienda.domain.model.Cart cart =
+                    new com.example.applicationtienda.domain.model.Cart("CART_002");
+
+            com.example.applicationtienda.patterns.behavioral.CommandHistory history =
+                    new com.example.applicationtienda.patterns.behavioral.CommandHistory();
+
+            // Ejecutar comandos
+            history.executeCommand(new com.example.applicationtienda.patterns.behavioral.AddToCartCommand(cart, laptop, 1));
+            history.executeCommand(new com.example.applicationtienda.patterns.behavioral.AddToCartCommand(cart, camisa, 2));
+            Log.d(TAG, "Carrito después de agregar: $" + cart.getTotal());
+
+            // Deshacer último comando
+            history.undo();
+            Log.d(TAG, "Carrito después de UNDO: $" + cart.getTotal());
+
+            // Rehacer
+            history.redo();
+            Log.d(TAG, "Carrito después de REDO: $" + cart.getTotal());
+
+            history.printHistory();
+
+            Log.d(TAG, "\n========== PRUEBA 5: STATE (Máquina de estados del pedido) ==========");
+
+            Order pedido = shop.createOrder("USER_789", laptop);
+            Log.d(TAG, "Estado inicial: " + pedido.getStatus());
+
+            pedido.process();
+            Log.d(TAG, "Estado después de process(): " + pedido.getStatus());
+
+            pedido.ship();
+            Log.d(TAG, "Estado después de ship(): " + pedido.getStatus());
+
+            pedido.deliver();
+            Log.d(TAG, "Estado después de deliver(): " + pedido.getStatus());
+
+            // Intentar cancelar un pedido entregado (no debería permitirlo)
+            pedido.cancel();
+            Log.d(TAG, "Estado final: " + pedido.getStatus());
+
+            Log.d(TAG, "\n========== PRUEBA 6: STATE (Cancelar pedido) ==========");
+            Order pedido2 = shop.createOrder("USER_999", camisa);
+            Log.d(TAG, "Estado inicial: " + pedido2.getStatus());
+
+            pedido2.cancel();
+            Log.d(TAG, "Estado después de cancel(): " + pedido2.getStatus());
+
+            // Intentar procesar un pedido cancelado (no debería permitirlo)
+            pedido2.process();
+            Log.d(TAG, "Estado final: " + pedido2.getStatus());
+
+            Log.d(TAG, "\n========== TODOS LOS PATRONES COMPLETADOS ==========");
+
+            Toast.makeText(this, "¡Todos los patrones funcionan! Revisa Logcat", Toast.LENGTH_LONG).show();
 
         } catch (Exception e) {
             Log.e(TAG, "Error: " + e.getMessage(), e);
