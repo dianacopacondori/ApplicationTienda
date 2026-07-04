@@ -9,6 +9,8 @@ import com.example.applicationtienda.domain.model.Order;
 import com.example.applicationtienda.domain.model.Product;
 import com.example.applicationtienda.patterns.structural.ShopFacade;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     // Etiqueta para filtrar los mensajes en el Logcat
@@ -22,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
         // Ejecutamos las pruebas de los patrones
         probarPatrones();
         probarCommandYState();
+        probarRoomDatabase();
     }
 
     private void probarPatrones() {
@@ -147,6 +150,32 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG, "Error: " + e.getMessage(), e);
             Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
+    }
+    private void probarRoomDatabase() {
+        new Thread(() -> {
+            try {
+                Log.d(TAG, "\n========== PRUEBA 7: ROOM DATABASE ==========");
+
+                com.example.applicationtienda.infrastructure.persistence.RoomProductRepository roomRepo =
+                        new com.example.applicationtienda.infrastructure.persistence.RoomProductRepository(this);
+
+                roomRepo.addSampleProducts();
+
+                List<Product> productos = roomRepo.getAllProducts();
+                Log.d(TAG, "Total de productos en BD: " + productos.size());
+
+                for (Product p : productos) {
+                    Log.d(TAG, "- " + p.getName() + " | $" + p.getPrice() + " | Stock: " + p.getStock());
+                }
+
+                runOnUiThread(() -> {
+                    Toast.makeText(this, "¡Room Database funcionando! Revisa Logcat", Toast.LENGTH_LONG).show();
+                });
+
+            } catch (Exception e) {
+                Log.e(TAG, "Error en Room: " + e.getMessage(), e);
+            }
+        }).start();
     }
 }
 
