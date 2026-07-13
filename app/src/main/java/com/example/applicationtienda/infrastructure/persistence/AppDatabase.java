@@ -5,13 +5,23 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {ProductEntity.class}, version = 1, exportSchema = false)
+@Database(
+        entities = {
+                ProductEntity.class,
+                OrderEntity.class,
+                OrderItemEntity.class
+        },
+        version = 2,
+        exportSchema = false
+)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase instance;
 
-    // Método abstracto para obtener el DAO
+    // Métodos abstractos para obtener los DAOs
     public abstract ProductDao productDao();
+    public abstract OrderDao orderDao();
+    public abstract OrderItemDao orderItemDao();
 
     // Método singleton para obtener la instancia de la base de datos
     public static synchronized AppDatabase getInstance(Context context) {
@@ -21,7 +31,7 @@ public abstract class AppDatabase extends RoomDatabase {
                             AppDatabase.class,
                             "tienda_virtual_database"
                     )
-                    .fallbackToDestructiveMigration() // Borra y recrea si cambia la versión
+                    .fallbackToDestructiveMigration()
                     .build();
         }
         return instance;

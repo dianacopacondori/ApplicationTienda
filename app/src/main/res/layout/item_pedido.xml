@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="#FFFFFF">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Número de pedido -->
+        <TextView
+            android:id="@+id/tvNumeroPedido"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pedido #12345"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="#0288D1"/>
+
+        <!-- Fecha -->
+        <TextView
+            android:id="@+id/tvFecha"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="15/07/2026 10:30"
+            android:textSize="14sp"
+            android:textColor="#757575"/>
+
+        <!-- Método de pago -->
+        <TextView
+            android:id="@+id/tvMetodoPago"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Método: Yape"
+            android:textSize="14sp"
+            android:textColor="#212121"/>
+
+        <!-- Estado -->
+        <TextView
+            android:id="@+id/tvEstado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Estado: COMPLETADO"
+            android:textStyle="bold"
+            android:textColor="#4CAF50"
+            android:textSize="14sp"/>
+
+        <!-- Total -->
+        <TextView
+            android:id="@+id/tvTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Total: S/. 0.00"
+            android:textStyle="bold"
+            android:textColor="#FFC107"
+            android:textSize="18sp"/>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

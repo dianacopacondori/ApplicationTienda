@@ -132,4 +132,8 @@ public class RoomProductRepository implements ProductRepository {
         entity.setCategory(product.getCategory());
         return entity;
     }
+    public boolean isEmpty() {
+        List<ProductEntity> products = productDao.getAllProducts();
+        return products == null || products.isEmpty();
+    }
 }

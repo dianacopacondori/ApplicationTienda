@@ -1,6 +1,7 @@
 package com.example.applicationtienda.infrastructure.persistence;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.annotation.NonNull;
 
@@ -19,7 +20,8 @@ public class ProductEntity {
     // Constructor vacío (Obligatorio para Room)
     public ProductEntity() {}
 
-    // Constructor completo
+    // Constructor completo(Ignorado por Room)
+    @Ignore
     public ProductEntity(String id, String name, String description,
                          double price, int stock, String category) {
         this.id = id;
