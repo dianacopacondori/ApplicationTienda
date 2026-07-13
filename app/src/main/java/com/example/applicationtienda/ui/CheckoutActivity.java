@@ -109,19 +109,24 @@ public class CheckoutActivity extends AppCompatActivity {
 
         new Thread(() -> {
             try {
+                // 1. Calcular el total REAL (Subtotal + Delivery)
+                double subtotal = carrito.getTotal();
+                double delivery = 15.00; // El mismo valor que mostramos en pantalla
+                double totalFinal = subtotal + delivery;
+
                 // Crear pedido usando Builder (Patrón Builder)
                 OrderBuilder builder = new OrderBuilder();
                 builder.setUserId("USER_001");
 
-                List<Product> productos = carrito.getItems().stream()
+                List<com.example.applicationtienda.domain.model.Product> productos = carrito.getItems().stream()
                         .map(item -> item.getProduct())
                         .toList();
 
-                for (Product producto : productos) {
+                for (com.example.applicationtienda.domain.model.Product producto : productos) {
                     builder.addProduct(producto);
                 }
 
-                Order pedido = builder.build();
+                com.example.applicationtienda.domain.model.Order pedido = builder.build();
 
                 // Procesar pedido usando State (Patrón State)
                 pedido.process(); // Pendiente -> Procesando
@@ -131,11 +136,12 @@ public class CheckoutActivity extends AppCompatActivity {
                 AppDatabase db = AppDatabase.getInstance(this);
                 RoomOrderRepository repository = new RoomOrderRepository(db);
 
+                // 2. ¡AQUÍ ESTÁ EL CAMBIO! Enviamos 'totalFinal' en lugar de 'carrito.getTotal()'
                 repository.guardarPedido(
                         "USER_001",
                         metodoPagoSeleccionado,
                         carrito.getItems(),
-                        carrito.getTotal()
+                        totalFinal  // <--- CAMBIADO: Ahora guarda el precio con delivery
                 );
 
                 runOnUiThread(() -> {
