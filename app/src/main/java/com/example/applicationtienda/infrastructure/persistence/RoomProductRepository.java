@@ -75,7 +75,7 @@ public class RoomProductRepository implements ProductRepository {
                 "Laptop de alto rendimiento para gaming",
                 1500.00,
                 10,
-                "Electrónica"
+                "Laptop"
         ));
 
         sampleProducts.add(new ProductEntity(
@@ -84,7 +84,7 @@ public class RoomProductRepository implements ProductRepository {
                 "Último modelo con cámara profesional",
                 800.00,
                 25,
-                "Electrónica"
+                "Smartphone"
         ));
 
         sampleProducts.add(new ProductEntity(
@@ -102,7 +102,7 @@ public class RoomProductRepository implements ProductRepository {
                 "Zapatillas deportivas para correr",
                 120.00,
                 30,
-                "Ropa"
+                "Calzado"
         ));
 
         productDao.insertAllProducts(sampleProducts);

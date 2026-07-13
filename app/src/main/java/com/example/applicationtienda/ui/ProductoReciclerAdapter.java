@@ -76,7 +76,7 @@ public class ProductoReciclerAdapter extends RecyclerView.Adapter<ProductoRecicl
             imageView.setImageResource(R.drawable.smartphone);
         } else if (catLower.contains("camisa") || catLower.contains("ropa")) {
             imageView.setImageResource(R.drawable.camisa);
-        } else if (catLower.contains("zapatilla")) {
+        } else if (catLower.contains("calzado")) {
             imageView.setImageResource(R.drawable.zapatillas);
         } else if (catLower.contains("audífono")) {
             imageView.setImageResource(R.drawable.audifonos);
