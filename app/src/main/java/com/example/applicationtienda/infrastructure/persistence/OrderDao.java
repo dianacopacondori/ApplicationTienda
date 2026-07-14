@@ -21,4 +21,7 @@ public interface OrderDao {
 
     @Query("DELETE FROM orders")
     void deleteAllOrders();
+
+    @Query("UPDATE orders SET estado = :estado WHERE id = :orderId")
+    void updateOrderState(String orderId, String estado);
 }

@@ -38,7 +38,7 @@ public class RoomOrderRepository {
                 fecha,
                 metodoPago,
                 total,
-                "COMPLETADO"
+                "PENDIENTE"
         );
 
         orderDao.insertOrder(order);

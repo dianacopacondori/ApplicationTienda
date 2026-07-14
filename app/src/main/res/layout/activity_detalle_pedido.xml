@@ -8,444 +8,475 @@
     android:background="#F5F7FA"
     android:fillViewport="true"
     tools:context=".ui.DetallePedidoActivity">
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/main"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="20dp">
 
-    <!-- Header con botón volver -->
-    <ImageButton
-        android:id="@+id/btnVolver"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@drawable/bg_button_rounded"
-        android:src="@android:drawable/ic_media_previous"
-        android:contentDescription="Volver"
-        app:tint="#0288D1"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/tvTitulo"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Detalle del Pedido"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:textColor="#0288D1"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@id/btnVolver"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="16dp"/>
+        android:padding="20dp">
 
-    <!-- Card de Productos del Pedido -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardProductos"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="4dp"
-        app:cardBackgroundColor="#FFFFFF"
-        app:layout_constraintTop_toBottomOf="@id/tvTitulo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        <!-- Header con botón volver -->
+        <ImageButton
+            android:id="@+id/btnVolver"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_button_rounded"
+            android:src="@android:drawable/ic_media_previous"
+            android:contentDescription="Volver"
+            app:tint="#0288D1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tvTitulo"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:text="Detalle del Pedido"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#0288D1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btnVolver"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="16dp"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Productos del Pedido"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="#212121"
-                android:layout_marginBottom="12dp"/>
+        <!-- Card de Productos del Pedido -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardProductos"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="#FFFFFF"
+            app:layout_constraintTop_toBottomOf="@id/tvTitulo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvDetalleItems"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"/>
-
-            <!-- Número de Pedido -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:padding="16dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Pedido #"
-                    android:textSize="14sp"
-                    android:textColor="#757575"/>
-
-                <TextView
-                    android:id="@+id/tvNumeroPedido"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="#12345"
-                    android:textSize="14sp"
+                    android:text="Productos del Pedido"
+                    android:textSize="18sp"
                     android:textStyle="bold"
-                    android:textColor="#0288D1"/>
-            </LinearLayout>
+                    android:textColor="#212121"
+                    android:layout_marginBottom="12dp"/>
 
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvDetalleItems"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"/>
 
-    <!-- Card de Estado de Envío -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardEstadoEnvio"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="4dp"
-        app:cardBackgroundColor="#FFFFFF"
-        app:layout_constraintTop_toBottomOf="@id/cardProductos"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Estado de Envío"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="#212121"/>
-
-            <!-- Timeline de estados -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:orientation="vertical">
-
-                <!-- Estado 1: Pedido Confirmado -->
+                <!-- Número de Pedido -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:layout_marginTop="16dp"
+                    android:orientation="horizontal">
 
-                    <View
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:background="@drawable/bg_circle_success"
-                        android:layout_marginEnd="12dp"/>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:text="Pedido #"
+                        android:textSize="14sp"
+                        android:textColor="#757575"/>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Pedido Confirmado"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:textColor="#212121"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="15 Jul 2026, 10:30 AM"
-                            android:textSize="12sp"
-                            android:textColor="#757575"/>
-                    </LinearLayout>
-                </LinearLayout>
-
-                <!-- Línea conectora -->
-                <View
-                    android:layout_width="2dp"
-                    android:layout_height="20dp"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginVertical="4dp"
-                    android:background="#0288D1"/>
-
-                <!-- Estado 2: En Proceso -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
-
-                    <View
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:background="@drawable/bg_circle_success"
-                        android:layout_marginEnd="12dp"/>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
+                    <TextView
+                        android:id="@+id/tvNumeroPedido"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="En Proceso"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:textColor="#212121"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="15 Jul 2026, 2:00 PM"
-                            android:textSize="12sp"
-                            android:textColor="#757575"/>
-                    </LinearLayout>
-                </LinearLayout>
-
-                <!-- Línea conectora -->
-                <View
-                    android:layout_width="2dp"
-                    android:layout_height="20dp"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginVertical="4dp"
-                    android:background="#E0E0E0"/>
-
-                <!-- Estado 3: En Envío -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
-
-                    <View
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:background="@drawable/bg_circle_pending"
-                        android:layout_marginEnd="12dp"/>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="En Envío"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:textColor="#757575"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Pendiente"
-                            android:textSize="12sp"
-                            android:textColor="#757575"/>
-                    </LinearLayout>
-                </LinearLayout>
-
-                <!-- Línea conectora -->
-                <View
-                    android:layout_width="2dp"
-                    android:layout_height="20dp"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginVertical="4dp"
-                    android:background="#E0E0E0"/>
-
-                <!-- Estado 4: Entregado -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
-
-                    <View
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:background="@drawable/bg_circle_pending"
-                        android:layout_marginEnd="12dp"/>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Entregado"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:textColor="#757575"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Pendiente"
-                            android:textSize="12sp"
-                            android:textColor="#757575"/>
-                    </LinearLayout>
+                        android:text="#12345"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="#0288D1"/>
                 </LinearLayout>
 
             </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-            <!-- Dirección de entrega -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Dirección de Entrega"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:textColor="#212121"/>
-
-            <TextView
-                android:id="@+id/tvDireccionEntrega"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Av. Principal 123, Lima, Perú"
-                android:textSize="14sp"
-                android:textColor="#757575"/>
-
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-
-    <!-- Card de Boleta/Factura -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardBoleta"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="4dp"
-        app:cardBackgroundColor="#FFFFFF"
-        app:layout_constraintTop_toBottomOf="@id/cardEstadoEnvio"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <!-- Card de Estado de Envío (CON IDs PARA PATRÓN STATE) -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardEstadoEnvio"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:layout_marginTop="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="#FFFFFF"
+            app:layout_constraintTop_toBottomOf="@id/cardProductos"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Boleta Electrónica"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="#212121"/>
-
-            <!-- Número de Boleta -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:padding="16dp">
 
                 <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="N° de Boleta:"
-                    android:textSize="14sp"
-                    android:textColor="#757575"/>
-
-                <TextView
-                    android:id="@+id/tvNumeroBoleta"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="B001-12345"
-                    android:textSize="14sp"
+                    android:text="Estado de Envío"
+                    android:textSize="18sp"
                     android:textStyle="bold"
-                    android:textColor="#0288D1"/>
-            </LinearLayout>
-
-            <!-- Fecha de Emisión -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Fecha de Emisión:"
-                    android:textSize="14sp"
-                    android:textColor="#757575"/>
-
-                <TextView
-                    android:id="@+id/tvFechaEmision"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="15/07/2026"
-                    android:textSize="14sp"
                     android:textColor="#212121"/>
-            </LinearLayout>
 
-            <!-- Total -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:orientation="horizontal">
+                <!-- Timeline de estados -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:orientation="vertical">
+
+                    <!-- Estado 1: Pedido Confirmado -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <View
+                            android:id="@+id/circleConfirmado"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:background="@drawable/bg_circle_success"
+                            android:layout_marginEnd="12dp"/>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Pedido Confirmado"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:textColor="#212121"/>
+
+                            <TextView
+                                android:id="@+id/tvFechaConfirmado"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Pendiente"
+                                android:textSize="12sp"
+                                android:textColor="#757575"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Línea conectora 1 -->
+                    <View
+                        android:id="@+id/line1"
+                        android:layout_width="2dp"
+                        android:layout_height="20dp"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginVertical="4dp"
+                        android:background="#E0E0E0"/>
+
+                    <!-- Estado 2: En Proceso -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <View
+                            android:id="@+id/circleProceso"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:background="@drawable/bg_circle_pending"
+                            android:layout_marginEnd="12dp"/>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="En Proceso"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:textColor="#212121"/>
+
+                            <TextView
+                                android:id="@+id/tvFechaProceso"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Pendiente"
+                                android:textSize="12sp"
+                                android:textColor="#757575"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Línea conectora 2 -->
+                    <View
+                        android:id="@+id/line2"
+                        android:layout_width="2dp"
+                        android:layout_height="20dp"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginVertical="4dp"
+                        android:background="#E0E0E0"/>
+
+                    <!-- Estado 3: En Envío -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <View
+                            android:id="@+id/circleEnvio"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:background="@drawable/bg_circle_pending"
+                            android:layout_marginEnd="12dp"/>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvTextoEnvio"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="En Envío"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:textColor="#757575"/>
+
+                            <TextView
+                                android:id="@+id/tvFechaEnvio"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Pendiente"
+                                android:textSize="12sp"
+                                android:textColor="#757575"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Línea conectora 3 -->
+                    <View
+                        android:id="@+id/line3"
+                        android:layout_width="2dp"
+                        android:layout_height="20dp"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginVertical="4dp"
+                        android:background="#E0E0E0"/>
+
+                    <!-- Estado 4: Entregado -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <View
+                            android:id="@+id/circleEntregado"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:background="@drawable/bg_circle_pending"
+                            android:layout_marginEnd="12dp"/>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvTextoEntregado"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Entregado"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:textColor="#757575"/>
+
+                            <TextView
+                                android:id="@+id/tvFechaEntregado"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Pendiente"
+                                android:textSize="12sp"
+                                android:textColor="#757575"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Dirección de entrega -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="Dirección de Entrega"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="#212121"/>
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:id="@+id/tvDireccionEntrega"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Total:"
+                    android:layout_marginTop="8dp"
+                    android:text="Av. Principal 123, Lima, Perú"
                     android:textSize="14sp"
                     android:textColor="#757575"/>
 
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Card de Boleta/Factura -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardBoleta"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="#FFFFFF"
+            app:layout_constraintTop_toBottomOf="@id/cardEstadoEnvio"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
                 <TextView
-                    android:id="@+id/tvTotalBoleta"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="S/. 4,500.00"
-                    android:textSize="14sp"
+                    android:text="Boleta Electrónica"
+                    android:textSize="18sp"
                     android:textStyle="bold"
-                    android:textColor="#FFC107"/>
+                    android:textColor="#212121"/>
+
+                <!-- Número de Boleta -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="N° de Boleta:"
+                        android:textSize="14sp"
+                        android:textColor="#757575"/>
+
+                    <TextView
+                        android:id="@+id/tvNumeroBoleta"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="B001-12345"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="#0288D1"/>
+                </LinearLayout>
+
+                <!-- Fecha de Emisión -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Fecha de Emisión:"
+                        android:textSize="14sp"
+                        android:textColor="#757575"/>
+
+                    <TextView
+                        android:id="@+id/tvFechaEmision"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="15/07/2026"
+                        android:textSize="14sp"
+                        android:textColor="#212121"/>
+                </LinearLayout>
+
+                <!-- Total -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Total:"
+                        android:textSize="14sp"
+                        android:textColor="#757575"/>
+
+                    <TextView
+                        android:id="@+id/tvTotalBoleta"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="S/. 4,500.00"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFC107"/>
+                </LinearLayout>
+
             </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+        <!-- Botón Simular Avance de Estado (NUEVO) -->
+        <Button
+            android:id="@+id/btnSimularAvance"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_marginTop="16dp"
+            android:text="🚚 Simular Avance de Estado"
+            android:textAllCaps="false"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:backgroundTint="#4CAF50"
+            app:cornerRadius="16dp"
+            app:layout_constraintTop_toBottomOf="@id/cardBoleta"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Botón Descargar Boleta -->
-    <Button
-        android:id="@+id/btnDescargarBoleta"
-        android:layout_width="0dp"
-        android:layout_height="52dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="24dp"
-        android:text="📄 Descargar Boleta (PDF)"
-        android:textAllCaps="false"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:backgroundTint="#0288D1"
-        app:cornerRadius="16dp"
-        app:layout_constraintTop_toBottomOf="@id/cardBoleta"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- Botón Descargar Boleta -->
+        <Button
+            android:id="@+id/btnDescargarBoleta"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="24dp"
+            android:text="📄 Descargar Boleta (PDF)"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:backgroundTint="#0288D1"
+            app:cornerRadius="16dp"
+            app:layout_constraintTop_toBottomOf="@id/btnSimularAvance"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
