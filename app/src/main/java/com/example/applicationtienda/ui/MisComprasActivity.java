@@ -25,7 +25,6 @@ public class MisComprasActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Quitar la barra de título
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
@@ -41,11 +40,8 @@ public class MisComprasActivity extends AppCompatActivity {
         Button btnCuenta = findViewById(R.id.btnCuenta);
         Button btnMisCompras = findViewById(R.id.btnMisCompras);
 
-        btnInicio.setOnClickListener(v ->
-                startActivity(new Intent(this, ProductosActivity.class)));
-
-        btnCuenta.setOnClickListener(v ->
-                startActivity(new Intent(this, CuentaActivity.class)));
+        btnInicio.setOnClickListener(v -> startActivity(new Intent(this, ProductosActivity.class)));
+        btnCuenta.setOnClickListener(v -> startActivity(new Intent(this, CuentaActivity.class)));
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -54,34 +50,27 @@ public class MisComprasActivity extends AppCompatActivity {
         });
     }
 
+    // Solo recargar al volver desde DetallePedidoActivity
+    @Override
+    protected void onResume() {
+        super.onResume();
+        cargarPedidos();
+    }
+
     private void cargarPedidos() {
-
         new Thread(() -> {
-
-            List<OrderEntity> pedidos =
-                    AppDatabase.getInstance(this)
-                            .orderDao()
-                            .getAllOrders();
+            List<OrderEntity> pedidos = AppDatabase.getInstance(this)
+                    .orderDao()
+                    .getAllOrders();
 
             runOnUiThread(() -> {
-
-                PedidoRecyclerAdapter adapter =
-                        new PedidoRecyclerAdapter(pedidos, pedido -> {
-
-                            Intent intent = new Intent(
-                                    MisComprasActivity.this,
-                                    DetallePedidoActivity.class);
-
-                            intent.putExtra("ORDER_ID", pedido.getId());
-
-                            startActivity(intent);
-
-                        });
-
+                PedidoRecyclerAdapter adapter = new PedidoRecyclerAdapter(pedidos, pedido -> {
+                    Intent intent = new Intent(MisComprasActivity.this, DetallePedidoActivity.class);
+                    intent.putExtra("ORDER_ID", pedido.getId());
+                    startActivity(intent);
+                });
                 rvPedidos.setAdapter(adapter);
-
             });
-
         }).start();
     }
 }

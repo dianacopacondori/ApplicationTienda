@@ -1,6 +1,8 @@
 package com.example.applicationtienda.ui;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -38,6 +40,11 @@ public class DetallePedidoActivity extends AppCompatActivity {
     private String orderId;
     private String estadoActual;
 
+    // NUEVO: Handler para la actualización automática cada 30 segundos
+    private Handler handler;
+    private Runnable runnableAvance;
+    private static final long INTERVALO_MS = 30000; // 30 segundos
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,10 +63,13 @@ public class DetallePedidoActivity extends AppCompatActivity {
                 Toast.makeText(this, "Boleta descargada", Toast.LENGTH_SHORT).show());
 
         btnSimularAvance = findViewById(R.id.btnSimularAvance);
-        btnSimularAvance.setOnClickListener(v -> simularAvanceEstado());
+        btnSimularAvance.setOnClickListener(v -> avanzarEstadoManual());
 
         orderId = getIntent().getStringExtra("ORDER_ID");
         cargarPedido(orderId);
+
+        // Iniciar actualización automática
+        iniciarActualizacionAutomatica();
     }
 
     private void inicializarVistas() {
@@ -68,24 +78,20 @@ public class DetallePedidoActivity extends AppCompatActivity {
         tvFechaEmision = findViewById(R.id.tvFechaEmision);
         tvTotalBoleta = findViewById(R.id.tvTotalBoleta);
 
-        // Timeline circles
         circleConfirmado = findViewById(R.id.circleConfirmado);
         circleProceso = findViewById(R.id.circleProceso);
         circleEnvio = findViewById(R.id.circleEnvio);
         circleEntregado = findViewById(R.id.circleEntregado);
 
-        // Timeline lines
         line1 = findViewById(R.id.line1);
         line2 = findViewById(R.id.line2);
         line3 = findViewById(R.id.line3);
 
-        // Timeline fechas
         tvFechaConfirmado = findViewById(R.id.tvFechaConfirmado);
         tvFechaProceso = findViewById(R.id.tvFechaProceso);
         tvFechaEnvio = findViewById(R.id.tvFechaEnvio);
         tvFechaEntregado = findViewById(R.id.tvFechaEntregado);
 
-        // Timeline textos
         tvTextoEnvio = findViewById(R.id.tvTextoEnvio);
         tvTextoEntregado = findViewById(R.id.tvTextoEntregado);
     }
@@ -115,12 +121,64 @@ public class DetallePedidoActivity extends AppCompatActivity {
         }).start();
     }
 
-    private void simularAvanceEstado() {
+    // NUEVO: Iniciar actualización automática cada 30 segundos
+    private void iniciarActualizacionAutomatica() {
+        handler = new Handler(Looper.getMainLooper());
+        runnableAvance = new Runnable() {
+            @Override
+            public void run() {
+                avanzarEstadoAutomatico();
+                // Programar la siguiente ejecución
+                handler.postDelayed(this, INTERVALO_MS);
+            }
+        };
+        // Iniciar después de 30 segundos
+        handler.postDelayed(runnableAvance, INTERVALO_MS);
+    }
+
+    // NUEVO: Avance automático (con notificación al usuario)
+    private void avanzarEstadoAutomatico() {
+        if (estadoActual == null || estadoActual.equals("ENTREGADO")) {
+            detenerActualizacionAutomatica();
+            return;
+        }
+
+        String nuevoEstado;
+        switch (estadoActual) {
+            case "PENDIENTE":
+                nuevoEstado = "PROCESANDO";
+                break;
+            case "PROCESANDO":
+                nuevoEstado = "ENVIADO";
+                break;
+            case "ENVIADO":
+                nuevoEstado = "ENTREGADO";
+                break;
+            default:
+                return;
+        }
+
+        new Thread(() -> {
+            AppDatabase db = AppDatabase.getInstance(this);
+            db.orderDao().updateOrderState(orderId, nuevoEstado);
+
+            runOnUiThread(() -> {
+                estadoActual = nuevoEstado;
+                actualizarTimeline(nuevoEstado);
+                Toast.makeText(this, "Estado actualizado: " + nuevoEstado, Toast.LENGTH_SHORT).show();
+
+                if (nuevoEstado.equals("ENTREGADO")) {
+                    detenerActualizacionAutomatica();
+                }
+            });
+        }).start();
+    }
+
+    // Avance manual (cuando el usuario presiona el botón)
+    private void avanzarEstadoManual() {
         if (estadoActual == null) return;
 
         String nuevoEstado;
-
-        // Máquina de estados: Pendiente -> Procesando -> Enviado -> Entregado
         switch (estadoActual) {
             case "PENDIENTE":
                 nuevoEstado = "PROCESANDO";
@@ -132,14 +190,13 @@ public class DetallePedidoActivity extends AppCompatActivity {
                 nuevoEstado = "ENTREGADO";
                 break;
             case "ENTREGADO":
-                Toast.makeText(this, "✅ El pedido ya fue entregado", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "El pedido ya fue entregado", Toast.LENGTH_SHORT).show();
                 return;
             default:
                 nuevoEstado = "PROCESANDO";
                 break;
         }
 
-        // Actualizar en la base de datos
         new Thread(() -> {
             AppDatabase db = AppDatabase.getInstance(this);
             db.orderDao().updateOrderState(orderId, nuevoEstado);
@@ -147,16 +204,32 @@ public class DetallePedidoActivity extends AppCompatActivity {
             runOnUiThread(() -> {
                 estadoActual = nuevoEstado;
                 actualizarTimeline(nuevoEstado);
-                Toast.makeText(this, "📦 Estado actualizado a: " + nuevoEstado, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Estado actualizado a: " + nuevoEstado, Toast.LENGTH_SHORT).show();
             });
         }).start();
+    }
+
+    // NUEVO: Detener la actualización automática
+    private void detenerActualizacionAutomatica() {
+        if (handler != null && runnableAvance != null) {
+            handler.removeCallbacks(runnableAvance);
+        }
+        btnSimularAvance.setEnabled(false);
+        btnSimularAvance.setText("✅ Pedido Entregado");
+        btnSimularAvance.setBackgroundColor(0xFF9E9E9E);
+    }
+
+    // NUEVO: Detener el Handler cuando se cierra la Activity
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        detenerActualizacionAutomatica();
     }
 
     private void actualizarTimeline(String estado) {
         String fechaActual = new SimpleDateFormat("dd MMM yyyy, hh:mm a",
                 Locale.getDefault()).format(new Date());
 
-        // Resetear todo a pendiente (gris)
         circleConfirmado.setBackgroundResource(R.drawable.bg_circle_pending);
         circleProceso.setBackgroundResource(R.drawable.bg_circle_pending);
         circleEnvio.setBackgroundResource(R.drawable.bg_circle_pending);
@@ -174,29 +247,23 @@ public class DetallePedidoActivity extends AppCompatActivity {
         tvFechaEnvio.setText("Pendiente");
         tvFechaEntregado.setText("Pendiente");
 
-        // Activar según el estado actual
         switch (estado) {
             case "PROCESANDO":
                 circleConfirmado.setBackgroundResource(R.drawable.bg_circle_success);
                 tvFechaConfirmado.setText(fechaActual);
-
                 circleProceso.setBackgroundResource(R.drawable.bg_circle_success);
                 tvFechaProceso.setText(fechaActual);
-
                 line1.setBackgroundColor(0xFF0288D1);
                 break;
 
             case "ENVIADO":
                 circleConfirmado.setBackgroundResource(R.drawable.bg_circle_success);
                 tvFechaConfirmado.setText(fechaActual);
-
                 circleProceso.setBackgroundResource(R.drawable.bg_circle_success);
                 tvFechaProceso.setText(fechaActual);
-
                 circleEnvio.setBackgroundResource(R.drawable.bg_circle_success);
                 tvFechaEnvio.setText(fechaActual);
                 tvTextoEnvio.setTextColor(0xFF212121);
-
                 line1.setBackgroundColor(0xFF0288D1);
                 line2.setBackgroundColor(0xFF0288D1);
                 break;
@@ -204,28 +271,21 @@ public class DetallePedidoActivity extends AppCompatActivity {
             case "ENTREGADO":
                 circleConfirmado.setBackgroundResource(R.drawable.bg_circle_success);
                 tvFechaConfirmado.setText(fechaActual);
-
                 circleProceso.setBackgroundResource(R.drawable.bg_circle_success);
                 tvFechaProceso.setText(fechaActual);
-
                 circleEnvio.setBackgroundResource(R.drawable.bg_circle_success);
                 tvFechaEnvio.setText(fechaActual);
                 tvTextoEnvio.setTextColor(0xFF212121);
-
                 circleEntregado.setBackgroundResource(R.drawable.bg_circle_success);
                 tvFechaEntregado.setText(fechaActual);
                 tvTextoEntregado.setTextColor(0xFF212121);
-
                 line1.setBackgroundColor(0xFF0288D1);
                 line2.setBackgroundColor(0xFF0288D1);
                 line3.setBackgroundColor(0xFF0288D1);
-
-                btnSimularAvance.setEnabled(false);
-                btnSimularAvance.setText("✅ Pedido Entregado");
-                btnSimularAvance.setBackgroundColor(0xFF9E9E9E);
+                detenerActualizacionAutomatica();
                 break;
 
-            default: // PENDIENTE o COMPLETADO (estado antiguo)
+            default:
                 circleConfirmado.setBackgroundResource(R.drawable.bg_circle_success);
                 tvFechaConfirmado.setText(fechaActual);
                 break;

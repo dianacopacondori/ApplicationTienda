@@ -67,12 +67,10 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
-        app:boxCornerRadiusBottomEnd="12dp"
-        app:boxCornerRadiusBottomStart="12dp"
-        app:boxCornerRadiusTopEnd="12dp"
-        app:boxCornerRadiusTopStart="12dp"
-        app:boxStrokeColor="#0288D1"
+        android:hint="Buscar productos..."
+        android:textColorHint="#757575"
         app:hintTextColor="#0288D1"
+        app:boxStrokeColor="#0288D1"
         app:startIconDrawable="@android:drawable/ic_menu_search"
         app:startIconTint="#0288D1"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -84,8 +82,8 @@
             android:id="@+id/etBuscar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Buscar productos..."
-            android:inputType="text" />
+            android:inputType="text"
+            android:textColor="#212121" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- RecyclerView de Productos (ÚNICO) -->

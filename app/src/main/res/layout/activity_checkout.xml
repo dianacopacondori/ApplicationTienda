@@ -374,11 +374,148 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Visa, Mastercard"
+                        android:text="Visa, Mastercard, Amex"
                         android:textSize="12sp"
                         android:textColor="#757575"/>
                 </LinearLayout>
             </LinearLayout>
+
+            <!-- FORMULARIO DE TARJETA (NUEVO - INICIALMENTE OCULTO) -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardDatosTarjeta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:visibility="gone"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="#F5F7FA">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="💳 Datos de la Tarjeta"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="#0288D1"
+                        android:layout_marginBottom="12dp"/>
+
+                    <!-- Número de Tarjeta -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Número de Tarjeta"
+                        android:textColorHint="#757575"
+                        app:hintTextColor="#0288D1"
+                        app:boxStrokeColor="#0288D1"
+                        app:boxCornerRadiusBottomEnd="8dp"
+                        app:boxCornerRadiusBottomStart="8dp"
+                        app:boxCornerRadiusTopEnd="8dp"
+                        app:boxCornerRadiusTopStart="8dp"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etNumeroTarjeta"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:maxLength="16"
+                            android:textSize="14sp"
+                            android:textColor="#212121" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Nombre del Titular -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:hint="Nombre del Titular"
+                        android:textColorHint="#757575"
+                        app:hintTextColor="#0288D1"
+                        app:boxStrokeColor="#0288D1"
+                        app:boxCornerRadiusBottomEnd="8dp"
+                        app:boxCornerRadiusBottomStart="8dp"
+                        app:boxCornerRadiusTopEnd="8dp"
+                        app:boxCornerRadiusTopStart="8dp"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etNombreTitular"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPersonName"
+                            android:textSize="14sp"
+                            android:textColor="#212121" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <!-- 3. Fecha de Vencimiento y CVV -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
+
+                        <!-- Fecha de Vencimiento -->
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="8dp"
+                            android:hint="MM/AA"
+                            android:textColorHint="#757575"
+                            app:hintTextColor="#0288D1"
+                            app:boxStrokeColor="#0288D1"
+                            app:boxCornerRadiusBottomEnd="8dp"
+                            app:boxCornerRadiusBottomStart="8dp"
+                            app:boxCornerRadiusTopEnd="8dp"
+                            app:boxCornerRadiusTopStart="8dp"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etFechaVencimiento"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="text"
+                                android:digits="0123456789/"
+                                android:maxLength="5"
+                                android:textSize="14sp"
+                                android:textColor="#212121" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <!-- CVV  -->
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="8dp"
+                            android:hint="CVV"
+                            android:textColorHint="#757575"
+                            app:hintTextColor="#0288D1"
+                            app:boxStrokeColor="#0288D1"
+                            app:boxCornerRadiusBottomEnd="8dp"
+                            app:boxCornerRadiusBottomStart="8dp"
+                            app:boxCornerRadiusTopEnd="8dp"
+                            app:boxCornerRadiusTopStart="8dp"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etCVV"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="numberPassword"
+                                android:maxLength="3"
+                                android:textSize="14sp"
+                                android:textColor="#212121" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <!-- Opción Yape -->
             <LinearLayout
@@ -422,6 +559,97 @@
                         android:textColor="#757575"/>
                 </LinearLayout>
             </LinearLayout>
+
+            <!-- FORMULARIO DE YAPE-->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardDatosYape"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:visibility="gone"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="#F5F7FA">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="📱 Datos de Yape/Plin"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="#7B1FA2"
+                        android:layout_marginBottom="12dp"/>
+
+                    <!-- Número de Celular -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Número de Celular"
+                        android:textColorHint="#757575"
+                        app:hintTextColor="#7B1FA2"
+                        app:boxStrokeColor="#7B1FA2"
+                        app:boxCornerRadiusBottomEnd="8dp"
+                        app:boxCornerRadiusBottomStart="8dp"
+                        app:boxCornerRadiusTopEnd="8dp"
+                        app:boxCornerRadiusTopStart="8dp"
+                        app:prefixText="+51 "
+                        app:prefixTextColor="#7B1FA2"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etCelularYape"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="phone"
+                            android:maxLength="9"
+                            android:textSize="14sp"
+                            android:textColor="#212121" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Nombre del Titular -->
+                    <!-- Nombre del Titular -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:hint="Nombre del Titular de la cuenta"
+                        android:textColorHint="#757575"
+                        app:hintTextColor="#7B1FA2"
+                        app:boxStrokeColor="#7B1FA2"
+                        app:boxCornerRadiusBottomEnd="8dp"
+                        app:boxCornerRadiusBottomStart="8dp"
+                        app:boxCornerRadiusTopEnd="8dp"
+                        app:boxCornerRadiusTopStart="8dp"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etNombreYape"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPersonName"
+                            android:textSize="14sp"
+                            android:textColor="#212121" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Mensaje informativo -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="ℹRecibirás una solicitud de pago en tu app de Yape/Plin para confirmar la transacción."
+                        android:textSize="12sp"
+                        android:textColor="#757575"
+                        android:textStyle="italic"/>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
         </LinearLayout>
 
         <!-- Botón Finalizar Compra -->

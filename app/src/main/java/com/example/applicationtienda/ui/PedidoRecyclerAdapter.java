@@ -15,8 +15,8 @@ import java.util.List;
 
 public class PedidoRecyclerAdapter extends RecyclerView.Adapter<PedidoRecyclerAdapter.ViewHolder> {
 
-    private final List<OrderEntity> pedidos;
-    private final OnPedidoClickListener listener;
+    private List<OrderEntity> pedidos;
+    private OnPedidoClickListener listener;
 
     public interface OnPedidoClickListener {
         void onPedidoClick(OrderEntity pedido);
@@ -30,24 +30,48 @@ public class PedidoRecyclerAdapter extends RecyclerView.Adapter<PedidoRecyclerAd
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_pedido, parent, false);
-
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
         OrderEntity pedido = pedidos.get(position);
 
+        // 1. Actualizar datos básicos
         holder.tvNumeroPedido.setText("Pedido #" + pedido.getId().substring(0, 8));
         holder.tvFecha.setText(pedido.getFecha());
-        holder.tvMetodoPago.setText("Método: " + pedido.getMetodoPago());
-        holder.tvEstado.setText("Estado: " + pedido.getEstado());
-        holder.tvTotal.setText("Total: S/. " + pedido.getTotal());
+        holder.tvTotal.setText("Total: S/. " + String.format("%.2f", pedido.getTotal()));
 
+        // 2. NUEVO: Actualizar el método de pago con el dato real de la BD
+        String metodo = pedido.getMetodoPago() != null ? pedido.getMetodoPago() : "No especificado";
+        holder.tvMetodoPago.setText("Método: " + metodo);
+
+        // 3. Actualizar estado con color dinámico
+        String estado = pedido.getEstado() != null ? pedido.getEstado() : "PENDIENTE";
+        holder.tvEstado.setText(estado);
+
+        // Colorear el texto del estado según corresponda
+        switch (estado) {
+            case "PENDIENTE":
+                holder.tvEstado.setTextColor(0xFFFF9800); // Naranja
+                break;
+            case "PROCESANDO":
+                holder.tvEstado.setTextColor(0xFF0288D1); // Azul
+                break;
+            case "ENVIADO":
+                holder.tvEstado.setTextColor(0xFF4CAF50); // Verde
+                break;
+            case "ENTREGADO":
+                holder.tvEstado.setTextColor(0xFF9E9E9E); // Gris
+                break;
+            default:
+                holder.tvEstado.setTextColor(0xFF212121); // Negro por defecto
+                break;
+        }
+
+        // Click para ir al detalle
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onPedidoClick(pedido);
@@ -61,21 +85,19 @@ public class PedidoRecyclerAdapter extends RecyclerView.Adapter<PedidoRecyclerAd
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-
         TextView tvNumeroPedido;
         TextView tvFecha;
-        TextView tvMetodoPago;
-        TextView tvEstado;
         TextView tvTotal;
+        TextView tvMetodoPago; // <-- Agregado
+        TextView tvEstado;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
             tvNumeroPedido = itemView.findViewById(R.id.tvNumeroPedido);
             tvFecha = itemView.findViewById(R.id.tvFecha);
-            tvMetodoPago = itemView.findViewById(R.id.tvMetodoPago);
-            tvEstado = itemView.findViewById(R.id.tvEstado);
             tvTotal = itemView.findViewById(R.id.tvTotal);
+            tvMetodoPago = itemView.findViewById(R.id.tvMetodoPago); // <-- Agregado
+            tvEstado = itemView.findViewById(R.id.tvEstado);
         }
     }
 }

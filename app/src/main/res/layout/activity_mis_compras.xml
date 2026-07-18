@@ -32,9 +32,11 @@
         app:boxCornerRadiusBottomStart="16dp"
         app:boxCornerRadiusTopEnd="16dp"
         app:boxCornerRadiusTopStart="16dp"
+        android:textColorHint="#757575"
         app:boxStrokeColor="#0288D1"
         app:hintTextColor="#0288D1"
         app:startIconDrawable="@android:drawable/ic_menu_search"
+        app:startIconTint="#0288D1"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         app:layout_constraintTop_toBottomOf="@id/tvTitulo"
         app:layout_constraintStart_toStartOf="parent"
@@ -44,8 +46,7 @@
             android:id="@+id/etBuscarPedido"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Buscar por N° de pedido"
-            android:inputType="number"/>
+            android:hint="Buscar por N° de pedido" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.recyclerview.widget.RecyclerView

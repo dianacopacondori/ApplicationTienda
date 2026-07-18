@@ -2,6 +2,7 @@ package com.example.applicationtienda.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,6 +22,9 @@ import com.example.applicationtienda.infrastructure.persistence.RoomOrderReposit
 import com.example.applicationtienda.patterns.creational.CartManager;
 import com.example.applicationtienda.patterns.creational.OrderBuilder;
 
+import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.textfield.TextInputEditText;
+
 import java.util.List;
 
 public class CheckoutActivity extends AppCompatActivity {
@@ -28,6 +32,12 @@ public class CheckoutActivity extends AppCompatActivity {
     private LinearLayout opcionEfectivo, opcionTarjeta, opcionYape;
     private String metodoPagoSeleccionado = "Efectivo";
 
+    // Formulario de tarjeta
+    private MaterialCardView cardDatosTarjeta;
+    private TextInputEditText etNumeroTarjeta, etNombreTitular, etFechaVencimiento, etCVV;
+    //Formulario de Yape
+    private MaterialCardView cardDatosYape;
+    private TextInputEditText etCelularYape, etNombreYape;
     // Views para mostrar datos reales
     private RecyclerView rvCheckoutItems;
     private TextView tvTotalItems;
@@ -69,6 +79,18 @@ public class CheckoutActivity extends AppCompatActivity {
         tvDelivery = findViewById(R.id.tvDelivery);
         tvTotalPagar = findViewById(R.id.tvTotalPagar);
 
+        // Formulario de tarjeta
+        cardDatosTarjeta = findViewById(R.id.cardDatosTarjeta);
+        etNumeroTarjeta = findViewById(R.id.etNumeroTarjeta);
+        etNombreTitular = findViewById(R.id.etNombreTitular);
+        etFechaVencimiento = findViewById(R.id.etFechaVencimiento);
+        etCVV = findViewById(R.id.etCVV);
+
+        //Formulario de Yape
+        cardDatosYape = findViewById(R.id.cardDatosYape);
+        etCelularYape = findViewById(R.id.etCelularYape);
+        etNombreYape = findViewById(R.id.etNombreYape);
+
         rvCheckoutItems.setLayoutManager(new LinearLayoutManager(this));
     }
 
@@ -88,7 +110,7 @@ public class CheckoutActivity extends AppCompatActivity {
 
         // Calcular totales
         double subtotal = carrito.getTotal();
-        double delivery = 15.00; // Delivery fijo
+        double delivery = 15.00;
         double total = subtotal + delivery;
         int totalItems = items.stream().mapToInt(CartItem::getQuantity).sum();
 
@@ -107,55 +129,58 @@ public class CheckoutActivity extends AppCompatActivity {
             return;
         }
 
+        // Validar según el método de pago seleccionado
+        if (metodoPagoSeleccionado.equals("Tarjeta")) {
+            if (!validarDatosTarjeta()) {
+                return;
+            }
+        } else if (metodoPagoSeleccionado.equals("Yape")) {
+            if (!validarDatosYape()) {
+                return;
+            }
+        }
+
+        // Si todo está OK, procesar la compra
         new Thread(() -> {
             try {
-                // 1. Calcular el total REAL (Subtotal + Delivery)
                 double subtotal = carrito.getTotal();
-                double delivery = 15.00; // El mismo valor que mostramos en pantalla
+                double delivery = 15.00;
                 double totalFinal = subtotal + delivery;
 
-                // Crear pedido usando Builder (Patrón Builder)
                 OrderBuilder builder = new OrderBuilder();
                 builder.setUserId("USER_001");
 
-                List<com.example.applicationtienda.domain.model.Product> productos = carrito.getItems().stream()
+                List<Product> productos = carrito.getItems().stream()
                         .map(item -> item.getProduct())
                         .toList();
 
-                for (com.example.applicationtienda.domain.model.Product producto : productos) {
+                for (Product producto : productos) {
                     builder.addProduct(producto);
                 }
 
-                com.example.applicationtienda.domain.model.Order pedido = builder.build();
+                Order pedido = builder.build();
+                pedido.process();
+                pedido.ship();
 
-                // Procesar pedido usando State (Patrón State)
-                pedido.process(); // Pendiente -> Procesando
-                pedido.ship();    // Procesando -> Enviado
-
-                // Guardar en base de datos
                 AppDatabase db = AppDatabase.getInstance(this);
                 RoomOrderRepository repository = new RoomOrderRepository(db);
 
-                // 2. ¡AQUÍ ESTÁ EL CAMBIO! Enviamos 'totalFinal' en lugar de 'carrito.getTotal()'
                 repository.guardarPedido(
                         "USER_001",
                         metodoPagoSeleccionado,
                         carrito.getItems(),
-                        totalFinal  // <--- CAMBIADO: Ahora guarda el precio con delivery
+                        totalFinal
                 );
 
                 runOnUiThread(() -> {
                     Toast.makeText(
                             this,
-                            "Compra realizada correctamente.\nMétodo de pago: " + metodoPagoSeleccionado +
-                                    "\nEstado: " + pedido.getStatus(),
+                            "Compra realizada correctamente.\nMétodo: " + metodoPagoSeleccionado,
                             Toast.LENGTH_LONG
                     ).show();
 
-                    // Limpiar carrito
                     CartManager.getInstance().limpiarCarrito();
 
-                    // Ir a MisComprasActivity
                     Intent intent = new Intent(this, MisComprasActivity.class);
                     intent.putExtra("COMPRA_REALIZADA", true);
                     startActivity(intent);
@@ -173,20 +198,73 @@ public class CheckoutActivity extends AppCompatActivity {
     private void seleccionarMetodo(String metodo) {
         metodoPagoSeleccionado = metodo;
 
+        // Resetear fondos
         opcionEfectivo.setBackgroundResource(R.drawable.bg_metodo_pago_unselected);
         opcionTarjeta.setBackgroundResource(R.drawable.bg_metodo_pago_unselected);
         opcionYape.setBackgroundResource(R.drawable.bg_metodo_pago_unselected);
 
+        // Resaltar el seleccionado
         switch (metodo) {
             case "Efectivo":
                 opcionEfectivo.setBackgroundResource(R.drawable.bg_metodo_pago_selected);
+                cardDatosTarjeta.setVisibility(View.GONE); // Ocultar formulario Tarjeta
+                cardDatosYape.setVisibility(View.GONE); //Ocultar formulario Yape
                 break;
             case "Tarjeta":
                 opcionTarjeta.setBackgroundResource(R.drawable.bg_metodo_pago_selected);
+                cardDatosTarjeta.setVisibility(View.VISIBLE); // Mostrar formulario
+                cardDatosYape.setVisibility(View.GONE); //Ocultar formulario Yape
                 break;
             case "Yape":
                 opcionYape.setBackgroundResource(R.drawable.bg_metodo_pago_selected);
+                cardDatosTarjeta.setVisibility(View.GONE); //Ocultar formulario tarjeta
+                cardDatosYape.setVisibility(View.VISIBLE);
                 break;
         }
+    }
+
+    private boolean validarDatosTarjeta() {
+        String numero = etNumeroTarjeta.getText().toString().trim();
+        String nombre = etNombreTitular.getText().toString().trim();
+        String fecha = etFechaVencimiento.getText().toString().trim();
+        String cvv = etCVV.getText().toString().trim();
+
+        if (numero.isEmpty() || numero.length() != 16) {
+            Toast.makeText(this, "Ingresa un número de tarjeta válido (16 dígitos)", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (nombre.isEmpty()) {
+            Toast.makeText(this, "Ingresa el nombre del titular", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (fecha.isEmpty() || !fecha.contains("/")) {
+            Toast.makeText(this, "Ingresa una fecha de vencimiento válida (MM/AA)", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (cvv.isEmpty() || cvv.length() != 3) {
+            Toast.makeText(this, "Ingresa un CVV válido (3 dígitos)", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
+    }
+    private boolean validarDatosYape() {
+        String celular = etCelularYape.getText().toString().trim();
+        String nombre = etNombreYape.getText().toString().trim();
+
+        if (celular.isEmpty() || celular.length() < 9) {
+            Toast.makeText(this, "⚠Ingresa un número de celular válido (9 dígitos)", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (nombre.isEmpty()) {
+            Toast.makeText(this, "⚠Ingresa el nombre del titular", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
     }
 }

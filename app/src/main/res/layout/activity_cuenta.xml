@@ -46,6 +46,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
+                android:textColorHint="#757575"
+                app:hintTextColor="#0288D1"
                 app:boxStrokeColor="#0288D1">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -61,6 +63,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
+                android:textColorHint="#757575"
+                app:hintTextColor="#0288D1"
                 app:boxStrokeColor="#0288D1">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -76,6 +80,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
+                android:textColorHint="#757575"
+                app:hintTextColor="#0288D1"
                 app:boxStrokeColor="#0288D1">
 
                 <com.google.android.material.textfield.TextInputEditText
