@@ -215,7 +215,7 @@ public class DetallePedidoActivity extends AppCompatActivity {
             handler.removeCallbacks(runnableAvance);
         }
         btnSimularAvance.setEnabled(false);
-        btnSimularAvance.setText("✅ Pedido Entregado");
+        btnSimularAvance.setText("Pedido Entregado");
         btnSimularAvance.setBackgroundColor(0xFF9E9E9E);
     }
 

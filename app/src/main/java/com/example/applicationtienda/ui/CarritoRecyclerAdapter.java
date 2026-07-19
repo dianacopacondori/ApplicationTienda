@@ -6,25 +6,26 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.applicationtienda.R;
 import com.example.applicationtienda.domain.model.CartItem;
-
+import com.example.applicationtienda.patterns.behavioral.Command;
+import com.example.applicationtienda.patterns.behavioral.DisminuirCantidadCommand;
+import com.example.applicationtienda.patterns.behavioral.RemoveFromCartCommand;
+import com.example.applicationtienda.patterns.creational.CartManager;
 import java.util.List;
 
 public class CarritoRecyclerAdapter extends RecyclerView.Adapter<CarritoRecyclerAdapter.ViewHolder> {
 
     private List<CartItem> items;
-    private OnEliminarClickListener listener;
+    private OnCarritoChangeListener listener;
 
-    public interface OnEliminarClickListener {
-        void onEliminar(CartItem item);
+    public interface OnCarritoChangeListener {
+        void onCarritoActualizado();
     }
 
-    public CarritoRecyclerAdapter(List<CartItem> items, OnEliminarClickListener listener) {
+    public CarritoRecyclerAdapter(List<CartItem> items, OnCarritoChangeListener listener) {
         this.items = items;
         this.listener = listener;
     }
@@ -40,42 +41,52 @@ public class CarritoRecyclerAdapter extends RecyclerView.Adapter<CarritoRecycler
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         CartItem item = items.get(position);
+        CartManager cartManager = CartManager.getInstance();
 
         holder.tvNombre.setText(item.getProduct().getName());
         holder.tvCantidad.setText("Cantidad: " + item.getQuantity());
         holder.tvPrecio.setText("S/. " + String.format("%.2f", item.getSubtotal()));
 
-        // Cargar la imagen según la categoría del producto
-        String categoria = item.getProduct().getCategory();
-        cargarImagenPorCategoria(holder.ivProducto, categoria);
+        cargarImagenPorCategoria(holder.ivProducto, item.getProduct().getCategory());
 
-        // Acción del botón eliminar
-        holder.btnEliminar.setOnClickListener(v -> {
+        // BOTÓN DISMINUIR
+        holder.btnDisminuir.setOnClickListener(v -> {
+            Command command = new DisminuirCantidadCommand(cartManager.getCart(), item);
+            cartManager.getCommandHistory().executeCommand(command);
+
             if (listener != null) {
-                listener.onEliminar(item);
+                listener.onCarritoActualizado();
+            }
+        });
+
+        // BOTÓN ELIMINAR
+        holder.btnEliminar.setOnClickListener(v -> {
+            Command command = new RemoveFromCartCommand(cartManager.getCart(), item.getProduct());
+            cartManager.getCommandHistory().executeCommand(command);
+
+            if (listener != null) {
+                listener.onCarritoActualizado();
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return items != null ? items.size() : 0;
     }
 
+    // Método clave para refrescar la lista desde la Activity
     public void actualizarItems(List<CartItem> nuevosItems) {
         this.items = nuevosItems;
         notifyDataSetChanged();
     }
 
-    // Método para cargar imágenes según la categoría (Misma lógica que en Productos)
     private void cargarImagenPorCategoria(ImageView imageView, String categoria) {
         if (categoria == null) {
             imageView.setImageResource(R.drawable.default_product);
             return;
         }
-
         String catLower = categoria.toLowerCase();
-
         if (catLower.contains("laptop")) {
             imageView.setImageResource(R.drawable.laptop);
         } else if (catLower.contains("smartphone") || catLower.contains("celular")) {
@@ -94,7 +105,7 @@ public class CarritoRecyclerAdapter extends RecyclerView.Adapter<CarritoRecycler
     static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView ivProducto;
         TextView tvNombre, tvCantidad, tvPrecio;
-        Button btnEliminar;
+        Button btnDisminuir, btnEliminar;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -102,6 +113,7 @@ public class CarritoRecyclerAdapter extends RecyclerView.Adapter<CarritoRecycler
             tvNombre = itemView.findViewById(R.id.tvNombre);
             tvCantidad = itemView.findViewById(R.id.tvCantidad);
             tvPrecio = itemView.findViewById(R.id.tvPrecio);
+            btnDisminuir = itemView.findViewById(R.id.btnDisminuir);
             btnEliminar = itemView.findViewById(R.id.btnEliminar);
         }
     }

@@ -9,6 +9,7 @@
     android:background="#F5F7FA"
     tools:context=".ui.MisComprasActivity">
 
+    <!-- Título -->
     <TextView
         android:id="@+id/tvTitulo"
         android:layout_width="wrap_content"
@@ -22,33 +23,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilBuscarPedido"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="20dp"
-        app:boxCornerRadiusBottomEnd="16dp"
-        app:boxCornerRadiusBottomStart="16dp"
-        app:boxCornerRadiusTopEnd="16dp"
-        app:boxCornerRadiusTopStart="16dp"
-        android:textColorHint="#757575"
-        app:boxStrokeColor="#0288D1"
-        app:hintTextColor="#0288D1"
-        app:startIconDrawable="@android:drawable/ic_menu_search"
-        app:startIconTint="#0288D1"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:layout_constraintTop_toBottomOf="@id/tvTitulo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etBuscarPedido"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Buscar por N° de pedido" />
-    </com.google.android.material.textfield.TextInputLayout>
-
+    <!-- Lista de Pedidos (Ahora anclada directamente al título) -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvPedidos"
         android:layout_width="0dp"
@@ -58,11 +33,12 @@
         android:clipToPadding="false"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-        app:layout_constraintTop_toBottomOf="@id/tilBuscarPedido"
+        app:layout_constraintTop_toBottomOf="@id/tvTitulo"
         app:layout_constraintBottom_toTopOf="@id/bottomNavigation"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
+    <!-- Navegación Inferior -->
     <LinearLayout
         android:id="@+id/bottomNavigation"
         android:layout_width="0dp"
@@ -110,4 +86,5 @@
             android:backgroundTint="#E1F5FE"
             android:textColor="#0288D1" />
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

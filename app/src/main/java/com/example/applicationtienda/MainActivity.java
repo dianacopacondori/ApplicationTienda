@@ -41,23 +41,6 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "Producto Oferta: " + laptopOferta.getName() + " | $" + laptopOferta.getPrice());
             Log.d(TAG, "Pedido: " + pedido.toString());
 
-            Log.d(TAG, "\n========== PRUEBA 2: STRATEGY (Estrategias de precios) ==========");
-            com.example.applicationtienda.domain.services.PricingService pricingService =
-                    new com.example.applicationtienda.domain.services.PricingService(
-                            new com.example.applicationtienda.patterns.behavioral.StandardPricing()
-                    );
-
-            Log.d(TAG, "Precio Estándar: $" + pricingService.calculateFinalPrice(laptop) +
-                    " [" + pricingService.getCurrentStrategyName() + "]");
-
-            pricingService.setStrategy(new com.example.applicationtienda.patterns.behavioral.PremiumPricing());
-            Log.d(TAG, "Precio Premium: $" + pricingService.calculateFinalPrice(laptop) +
-                    " [" + pricingService.getCurrentStrategyName() + "]");
-
-            pricingService.setStrategy(new com.example.applicationtienda.patterns.behavioral.SeasonalPricing());
-            Log.d(TAG, "Precio Temporada: $" + pricingService.calculateFinalPrice(laptop) +
-                    " [" + pricingService.getCurrentStrategyName() + "]");
-
             Log.d(TAG, "\n========== PRUEBA 3: OBSERVER (Carrito con notificaciones) ==========");
             com.example.applicationtienda.domain.model.Cart cart =
                     new com.example.applicationtienda.domain.model.Cart("CART_001");

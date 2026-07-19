@@ -1,15 +1,25 @@
 package com.example.applicationtienda.patterns.behavioral;
 
 import com.example.applicationtienda.domain.model.Cart;
+import com.example.applicationtienda.domain.model.CartItem;
 import com.example.applicationtienda.domain.model.Product;
 
 public class RemoveFromCartCommand implements Command {
     private Cart cart;
     private Product product;
+    private int cantidadEliminada = 1; // Guardamos la cantidad por si acaso
 
     public RemoveFromCartCommand(Cart cart, Product product) {
         this.cart = cart;
         this.product = product;
+
+        // Intentamos buscar el item actual para guardar su cantidad antes de borrarlo
+        for (CartItem item : cart.getItems()) {
+            if (item.getProduct().getId().equals(product.getId())) {
+                this.cantidadEliminada = item.getQuantity();
+                break;
+            }
+        }
     }
 
     @Override
@@ -19,8 +29,8 @@ public class RemoveFromCartCommand implements Command {
 
     @Override
     public void undo() {
-        // Para deshacer, volvemos a agregar el producto con cantidad 1
-        cart.addItem(product, 1);
+        // Al deshacer, lo volvemos a agregar con la cantidad que tenía
+        cart.addItem(product, cantidadEliminada);
     }
 
     @Override

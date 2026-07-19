@@ -2,6 +2,7 @@ package com.example.applicationtienda.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -63,12 +64,33 @@ public class CheckoutActivity extends AppCompatActivity {
         opcionEfectivo = findViewById(R.id.opcionEfectivo);
         opcionTarjeta = findViewById(R.id.opcionTarjeta);
         opcionYape = findViewById(R.id.opcionYape);
+
+        // 1. Declarar ambos botones
+        Button btnVolverCarrito = findViewById(R.id.btnVolverCarrito);
         Button btnFinalizar = findViewById(R.id.btnFinalizarCompra);
 
         opcionEfectivo.setOnClickListener(v -> seleccionarMetodo("Efectivo"));
         opcionTarjeta.setOnClickListener(v -> seleccionarMetodo("Tarjeta"));
         opcionYape.setOnClickListener(v -> seleccionarMetodo("Yape"));
 
+        // 2. Lógica del botón VOLVER (Método infalible)
+        if (btnVolverCarrito != null) {
+            btnVolverCarrito.setOnClickListener(v -> {
+                // Opción A: Intenta cerrar la pantalla actual (lo normal)
+                // finish();
+
+                // Opción B: Fuerza la apertura del Carrito y limpia el historial superior
+                Intent intent = new Intent(CheckoutActivity.this, CarritoActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
+                finish(); // Cierra el checkout para que no se acumule
+            });
+        } else {
+            // Si ves este Toast, significa que el XML no tiene el ID correcto
+            Toast.makeText(this, "Error: No se encontró el botón btnVolverCarrito", Toast.LENGTH_LONG).show();
+        }
+
+        // 3. Lógica del botón FINALIZAR
         btnFinalizar.setOnClickListener(v -> procesarCompra());
     }
 
@@ -188,6 +210,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 });
 
             } catch (Exception e) {
+                Log.e("CheckoutError", "Error al procesar la compra: " + e.getMessage(), e);
                 runOnUiThread(() -> {
                     Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 });

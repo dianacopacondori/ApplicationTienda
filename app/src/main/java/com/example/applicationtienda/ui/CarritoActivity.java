@@ -1,6 +1,5 @@
 package com.example.applicationtienda.ui;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -13,9 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.applicationtienda.R;
 import com.example.applicationtienda.domain.model.Cart;
-import com.example.applicationtienda.domain.model.CartItem;
 import com.example.applicationtienda.patterns.behavioral.CommandHistory;
-import com.example.applicationtienda.patterns.behavioral.RemoveFromCartCommand;
 import com.example.applicationtienda.patterns.creational.CartManager;
 
 public class CarritoActivity extends AppCompatActivity {
@@ -27,7 +24,6 @@ public class CarritoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Quitar la barra de título
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
@@ -36,30 +32,30 @@ public class CarritoActivity extends AppCompatActivity {
         rvCarrito = findViewById(R.id.rvCarrito);
         tvTotal = findViewById(R.id.tvTotal);
         Button btnComprar = findViewById(R.id.btnComprar);
-        Button btnDeshacer = findViewById(R.id.btnDeshacer); // Agrega este botón en el layout
+        Button btnDeshacer = findViewById(R.id.btnDeshacer);
+        Button btnSeguirComprando = findViewById(R.id.btnSeguirComprando);
 
         rvCarrito.setLayoutManager(new LinearLayoutManager(this));
 
-        // Inicializar historial de comandos (Patrón Command)
-        commandHistory = new CommandHistory();
-
+        // CORRECCIÓN CRÍTICA: Usar el historial del Singleton, NO crear uno nuevo.
+        // Así garantizamos que el botón "Deshacer" lea las acciones que el Adapter guardó.
+        commandHistory = CartManager.getInstance().getCommandHistory();
         Cart carrito = CartManager.getInstance().getCart();
 
-        // Adapter con listener para eliminar items
+        // El Adapter ahora solo notifica que debe actualizarse la vista.
         CarritoRecyclerAdapter adapter = new CarritoRecyclerAdapter(
                 carrito.getItems(),
-                item -> {
-                    // Crear comando para eliminar (Patrón Command)
-                    RemoveFromCartCommand command = new RemoveFromCartCommand(carrito, item.getProduct());
-                    commandHistory.executeCommand(command);
-                    actualizarVista();
+                new CarritoRecyclerAdapter.OnCarritoChangeListener() {
+                    @Override
+                    public void onCarritoActualizado() {
+                        actualizarVista();
+                    }
                 }
         );
 
         rvCarrito.setAdapter(adapter);
         actualizarVista();
 
-        // Botón comprar
         btnComprar.setOnClickListener(v -> {
             if (carrito.getItems().isEmpty()) {
                 Toast.makeText(this, "Tu carrito está vacío", Toast.LENGTH_SHORT).show();
@@ -67,17 +63,15 @@ public class CarritoActivity extends AppCompatActivity {
                 startActivity(new Intent(this, CheckoutActivity.class));
             }
         });
-            // Botón de volver
-            Button btnSeguirComprando = findViewById(R.id.btnSeguirComprando);
-            btnSeguirComprando.setOnClickListener(v -> {
-                // Volver a ProductosActivity
-                Intent intent = new Intent(this, ProductosActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                finish();
-            });
 
-        // Botón deshacer (Patrón Command)
+        btnSeguirComprando.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ProductosActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
+        });
+
+        // Botón deshacer (usa el MISMO historial que el Adapter)
         if (btnDeshacer != null) {
             btnDeshacer.setOnClickListener(v -> {
                 if (commandHistory.undo()) {
@@ -100,7 +94,6 @@ public class CarritoActivity extends AppCompatActivity {
         Cart carrito = CartManager.getInstance().getCart();
         tvTotal.setText("Total: S/. " + String.format("%.2f", carrito.getTotal()));
 
-        // Actualizar adapter
         CarritoRecyclerAdapter adapter = (CarritoRecyclerAdapter) rvCarrito.getAdapter();
         if (adapter != null) {
             adapter.actualizarItems(carrito.getItems());

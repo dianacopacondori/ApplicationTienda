@@ -65,6 +65,31 @@ public class Cart {
         notifyProductAdded(product); // Notificar
     }
 
+    public void disminuirCantidad(String productId) {
+        for (CartItem item : items) {
+            if (item.getProduct().getId().equals(productId)) {
+                if (item.getQuantity() > 1) {
+                    item.setQuantity(item.getQuantity() - 1);
+                } else {
+                    // Si la cantidad es 1, lo eliminamos del carrito
+                    items.remove(item);
+                }
+                return;
+            }
+        }
+    }
+
+    // Método auxiliar para el UNDO (restaurar cantidad exacta)
+    public void actualizarCantidad(String productId, int nuevaCantidad) {
+        for (CartItem item : items) {
+            if (item.getProduct().getId().equals(productId)) {
+                item.setQuantity(nuevaCantidad);
+                return;
+            }
+        }
+
+    }
+
     public void removeItem(String productId) {
         Product removedProduct = null;
         for (CartItem item : items) {
