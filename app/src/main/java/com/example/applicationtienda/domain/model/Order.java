@@ -41,6 +41,11 @@ public class Order {
     public void setUserId(String userId) { this.userId = userId; }
     public void addProduct(Product product) { this.products.add(product); }
     public void setState(OrderState state) { this.state = state; }
+
+    public OrderState getState() {
+        return state;
+    }
+
     public void setTotalAmount(double totalAmount){this.totalAmount= totalAmount;}
     //métodos delegados al estado actual
     public void process(){
@@ -60,4 +65,7 @@ public class Order {
     public String toString(){
         return "Order{" + "id='" + id + '\'' + ", userId='" + userId + '\'' + ", products=" + products.size() + ", total=" + totalAmount + ", status='" + getStatus() + '}';
     }
+
+
 }
+

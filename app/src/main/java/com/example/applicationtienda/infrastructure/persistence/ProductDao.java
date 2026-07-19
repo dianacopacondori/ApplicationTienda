@@ -7,7 +7,9 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import com.example.applicationtienda.infrastructure.persistence.ProductEntity;
 import java.util.List;
+
 
 @Dao
 public interface ProductDao {

@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import java.util.List;
+import com.example.applicationtienda.infrastructure.persistence.OrderEntity;
 
 @Dao
 public interface OrderDao {

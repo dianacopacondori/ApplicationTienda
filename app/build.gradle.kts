@@ -35,11 +35,16 @@ android {
     buildFeatures {
         compose = true
     }
+
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    }
 }
 
 dependencies {
     implementation(libs.androidx.monitor)
     implementation(libs.ext.junit)
+    implementation(libs.engage.core)
     // Dependencias para pruebas unitarias (JUnit)
     testImplementation("junit:junit:4.13.2")
     // Dependencias básicas de Android
@@ -51,6 +56,13 @@ dependencies {
     // Room Database para Java (annotationProcessor)
     implementation("androidx.room:room-runtime:2.6.1")
     annotationProcessor("androidx.room:room-compiler:2.6.1")
+    //Dependencias para pruebas de instrumentación (Android)
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test:runner:1.5.2")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 }
+
+
+
 
 
