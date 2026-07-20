@@ -39,6 +39,14 @@ android {
     testOptions {
         unitTests.isReturnDefaultValues = true
     }
+        testOptions {
+            unitTests.isReturnDefaultValues = true
+
+            // AGREGA ESTO PARA SILENCIAR LOS WARNINGS DE MOCKITO:
+            unitTests.all {
+                it.jvmArgs("-XX:+EnableDynamicAgentLoading")
+            }
+        }
 }
 
 dependencies {
@@ -60,6 +68,17 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test:runner:1.5.2")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    // JUnit 5 (Jupiter)
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    // Mockito
+    testImplementation("org.mockito:mockito-core:5.7.0")
+    testImplementation("org.mockito:mockito-inline:5.2.0")
+}
+//Activar JUnit5
+tasks.withType<Test> {
+    useJUnitPlatform()
 }
 
 

@@ -1,7 +1,7 @@
 package com.example.applicationtienda.patterns.behavioral;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach; // Para JUnit 5
+import org.junit.jupiter.api.Test;       // Para JUnit 5
 import static org.junit.Assert.*;
 
 import com.example.applicationtienda.domain.model.Cart;
@@ -37,7 +37,7 @@ public class CartObserverTest {
         }
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         cart = new Cart("CART_TEST_002");
         observer = new TestCartObserver();

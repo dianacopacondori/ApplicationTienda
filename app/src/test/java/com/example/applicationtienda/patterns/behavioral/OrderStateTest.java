@@ -1,7 +1,7 @@
 package com.example.applicationtienda.patterns.behavioral;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach; // Para JUnit 5
+import org.junit.jupiter.api.Test;       // Para JUnit 5
 import static org.junit.Assert.*;
 
 import com.example.applicationtienda.domain.model.Order;
@@ -11,7 +11,7 @@ public class OrderStateTest {
 
     private Order order;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         order = new Order();
     }
